@@ -10,3 +10,5 @@ class Solution {
         return ans;
     }
 }
+
+//note in this ques that : always two no of arr sum is calculating more that two is not required
