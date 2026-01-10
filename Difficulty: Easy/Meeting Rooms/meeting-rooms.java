@@ -40,9 +40,9 @@ class Solution {
         
         for(int i = 1; i<arr.length; i++) {
             int s2 = arr[i][0];
-            int e1 = arr[i-1][1];
+            int e1 = arr[i-1][1]-1;
             
-            if(s2 < e1){
+            if(s2 <= e1){
                 return false;
             }
         }
