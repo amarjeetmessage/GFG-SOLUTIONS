@@ -1,39 +1,116 @@
 class Solution {
-    public int find(int parent[], int x) {
-        if(parent[x] != x){
-            parent[x] = find(parent, parent[x]);
-        }
-        return parent[x];
-    }
-    public boolean union(int parent[], int u, int v) {
-        int pu = find(parent, u);
-        int pv = find(parent, v);
-        
-        if(pu == pv) {
-            return true;
-        }
-        
-        parent[pu] = pv;
-        return false;
-    }
     public boolean isCycle(int V, int[][] edges) {
-        // Code here
         
-        int parent[] = new int[V];
-        
-        for(int i = 0; i<V; i++) {
-            parent[i] = i;
+        ArrayList<ArrayList<Integer>> adj = new ArrayList<>();
+        for(int i = 0; i < V; i++) {
+            adj.add(new ArrayList<>());
+        }
+
+        for(int[] e : edges) {
+            adj.get(e[0]).add(e[1]);
+            adj.get(e[1]).add(e[0]);
         }
         
-        for(int[] edge : edges) {
-            int u = edge[0];
-            int v = edge[1];
+        // Code here
+        int[] par = new int[V];
+        int[] vis = new int[V];
+        for(int i = 0; i<V; i++) {
+            par[i] = -1;
+        }
+        Queue<Integer> q = new LinkedList<>();
+        
+       
+        for(int i = 0; i<V; i++) {
+            if(vis[i] == 0) {
+                
+                 q.add(i);
+                 vis[i] = 1;
+                 par[i] = -1;
+                
+               while(!q.isEmpty()) {
+                    int node = q.poll();
             
-            if(union(parent, u, v)){
-                return true;
+                    for(int neigh :adj.get(node) ) {
+                        if(vis[neigh] == 0) {
+                        q.add(neigh);
+                        vis[neigh] = 1;
+                        par[neigh] = node;
+                    }
+                    // else if(vis[neigh] == 1 && neigh == par[node]) {
+                    // //nothing
+                    // }
+                    else if(neigh != par[node]){
+                        return true;
+                     }
+            }
+        } 
             }
         }
         
-        return false;
         
-    }}
+        return false;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// class Solution {
+//     public boolean isCycle(int V, int[][] edges) {
+
+//         ArrayList<ArrayList<Integer>> adj = new ArrayList<>();
+//         for(int i = 0; i < V; i++) {
+//             adj.add(new ArrayList<>());
+//         }
+
+//         for(int[] e : edges) {
+//             adj.get(e[0]).add(e[1]);
+//             adj.get(e[1]).add(e[0]);
+//         }
+
+//         int vis[] = new int[V];
+//         int par[] = new int[V];
+
+//         Queue<Integer> q = new LinkedList<>();
+
+//         // Check for every component
+//         for(int i = 0; i < V; i++) {
+
+//             if(vis[i] == 0) {   // new component
+
+//                 q.add(i);
+//                 vis[i] = 1;
+//                 par[i] = -1;
+
+//                 while(!q.isEmpty()) {
+//                     int node = q.poll();
+
+//                     for(int neigh : adj.get(node)) {
+
+//                         if(vis[neigh] == 0) {   // not visited
+//                             vis[neigh] = 1;
+//                             par[neigh] = node;
+//                             q.add(neigh);
+//                         }
+//                         else if(neigh != par[node]) {
+//                             // visited but NOT parent → cycle found
+//                             return true;
+//                         }
+//                     }
+//                 }
+//             }
+//         }
+
+//         return false; // no cycle in any component
+//     }
+// }
